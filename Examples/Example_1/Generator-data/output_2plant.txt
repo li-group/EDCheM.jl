@@ -1,0 +1,315 @@
+16
+┌ Warning: type Clustering.KmeansResult{Matrix{Float64},Float64,Int64} does not exist in workspace; reconstructing
+└ @ JLD2 C:\Users\aramanuj\.julia\packages\JLD2\k9Gt0\src\data\reconstructing_datatypes.jl:461
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (win64)
+Optimize a model with 265702 rows, 69599 columns and 533467 nonzeros
+Model fingerprint: 0x8791e053
+Variable types: 55134 continuous, 14465 integer (14450 binary)
+Coefficient statistics:
+  Matrix range     [1e-13, 2e+05]
+  Objective range  [1e-03, 1e-03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+03]
+Warning: Model contains large matrix coefficient range
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 164388 rows and 31891 columns
+Presolve time: 1.51s
+Presolved: 101314 rows, 37708 columns, 366059 nonzeros
+Variable types: 26841 continuous, 10867 integer (10855 binary)
+
+Deterministic concurrent LP optimizer: primal and dual simplex
+Showing first log only...
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   19101   -2.4048507e+03   6.295831e+05   2.076576e+10      5s
+   33985   -2.5184571e+03   3.266979e+05   1.138038e+10     10s
+   52518   -2.5322336e+03   6.199858e+04   1.015560e+10     15s
+   63892   -2.3059495e+03   5.582222e+03   1.623779e+09     20s
+   70908   -1.0291300e+03   2.438784e+00   8.531733e+06     25s
+   72427   -1.0116298e+03   5.906525e-01   4.730401e+06     30s
+   75597   -7.9350622e+02   0.000000e+00   2.517057e+03     35s
+   78078   -6.3592485e+02   0.000000e+00   3.375604e+04     40s
+   80892   -3.7171435e+02   0.000000e+00   2.516589e+03     45s
+   87372   -2.5235072e+01   0.000000e+00   2.154596e+04     50s
+   92284    9.8698185e+01   0.000000e+00   6.040332e+05     55s
+   98147    2.1044600e+02   0.000000e+00   4.602112e+03     60s
+  102171    2.2362536e+02   0.000000e+00   1.211206e+03     65s
+  104424    2.2794178e+02   0.000000e+00   1.287835e+03     70s
+  108787    2.3362351e+02   0.000000e+00   1.766972e+03     75s
+  111920    2.3547287e+02   0.000000e+00   7.074501e+03     80s
+  114407    2.3599301e+02   0.000000e+00   3.985118e+04     85s
+  115940    2.3753569e+02   0.000000e+00   1.509878e+03     90s
+  117017    2.3877948e+02   0.000000e+00   2.422954e+03     95s
+  119344    2.4187794e+02   0.000000e+00   4.019030e+02    100s
+  122291    2.4309250e+02   0.000000e+00   1.883465e+04    105s
+Concurrent spin time: 1.30s
+
+Solved with dual simplex
+
+Root relaxation: objective 2.476406e+02, 87761 iterations, 106.38 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  247.64061    0   74          -  247.64061      -     -  110s
+H    0     0                     247.3793528  247.64061  0.11%     -  111s
+H    0     0                     247.5461789  247.64061  0.04%     -  111s
+     0     0  247.63498    0   58  247.54618  247.63498  0.04%     -  113s
+     0     0  247.63498    0   45  247.54618  247.63498  0.04%     -  120s
+     0     0  247.63169    0   43  247.54618  247.63169  0.03%     -  123s
+     0     0  247.62527    0   45  247.54618  247.62527  0.03%     -  124s
+     0     0  247.57543    0   56  247.54618  247.57543  0.01%     -  126s
+H    0     0                     247.5576398  247.57543  0.01%     -  126s
+
+Cutting planes:
+  Gomory: 13
+  Cover: 1
+  Implied bound: 1
+  MIR: 98
+  Flow cover: 4
+
+Explored 1 nodes (138616 simplex iterations) in 126.73 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 247.558 247.546 247.379
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.475576398222e+02, best bound 2.475754279711e+02, gap 0.0072%
+case =
+16
+case =
+16
+x=
+2-dimensional DenseAxisArray{Float64,2,...} with index sets:
+    Dimension 1, ["Plant", "Solar panel", "Wind Turbine"]
+    Dimension 2, ["r1", "r2", "r3", "r4", "r5"]
+And data, a 3×5 Matrix{Float64}:
+  0.0  1.0   0.0   0.0   0.0
+  0.0  3.0   0.0  -0.0  -0.0
+ -0.0  3.0  -0.0  -0.0  -0.0
+nt=
+2-dimensional DenseAxisArray{Float64,2,...} with index sets:
+    Dimension 1, Any[("r1", "r2"), ("r1", "r3"), ("r1", "r4"), ("r1", "r5"), ("r1", "ru"), ("r2", "r3"), ("r2", "r4"), ("r2", "r5"), ("r2", 
+"ru"), ("r3", "r4"), ("r3", "r5"), ("r3", "ru"), ("r4", "r5"), ("r4", "ru"), ("r5", "ru")]
+    Dimension 2, Base.OneTo(3)
+And data, a 15×3 Matrix{Float64}:
+ -0.0  -0.0  -0.0
+ -0.0  -0.0   0.0
+  0.0  -0.0  -0.0
+  0.0   0.0   0.0
+ -0.0  -0.0  -0.0
+  0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+  0.0  -0.0  -0.0
+ -0.0   1.0   1.0
+ -0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+ -0.0  -0.0  -0.0
+Total material cost =
+467550.98670863826
+only material cost =
+467550.98670863826
+Transportation cost =
+4365.509870666556
+Electricity cost =
+-9975.704743283051
+FIXOP cost =
+45389.83333333333
+FIXOP_l cost =
+0.0
+CAPEX cost =
+180037.13497087592
+CAPEX_l =
+176.57345481171984
+julia> 
+julia> value.(m[:dec])
+1-dimensional DenseAxisArray{Float64,1,...} with index sets:
+    Dimension 1, ["r1", "r2", "r3", "r4", "r5"]
+And data, a 5-element Vector{Float64}:
+ 0.0
+ 1.0
+ 0.0
+ 0.0
+ 0.0
+case =
+16
+┌ Warning: Assignment to `r` in soft scope is ambiguous because a global variable by the same name exists: `r` will be treated as a new local. Disambiguate by using `local r` to suppress this warning or `global r` to assign to the existing global variable.
+└ @ C:\Users\aramanuj\OneDrive - purdue.edu\Documents\GitHub\Asha_qualifier\Generator-data 2\calc_dist.jl:22
+┌ Warning: type Clustering.KmeansResult{Matrix{Float64},Float64,Int64} does not exist in workspace; reconstructing
+└ @ JLD2 C:\Users\aramanuj\.julia\packages\JLD2\k9Gt0\src\data\reconstructing_datatypes.jl:461
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (win64)
+Optimize a model with 265702 rows, 69599 columns and 533467 nonzeros
+Model fingerprint: 0x4a807db9
+Variable types: 55134 continuous, 14465 integer (14450 binary)
+Coefficient statistics:
+  Matrix range     [1e-13, 2e+05]
+  Objective range  [1e-03, 1e-03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+03]
+Warning: Model contains large matrix coefficient range
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 164388 rows and 31891 columns
+Presolve time: 2.82s
+Presolved: 101314 rows, 37708 columns, 366057 nonzeros
+Variable types: 26841 continuous, 10867 integer (10855 binary)
+
+Deterministic concurrent LP optimizer: primal and dual simplex
+Showing first log only...
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   12196   -2.2997677e+03   7.580561e+05   2.497908e+10      5s
+   24359   -2.4415218e+03   5.096408e+05   2.092907e+10     10s
+   34590   -2.5075558e+03   3.330660e+05   1.196635e+10     15s
+   46915   -2.5543513e+03   1.534126e+05   6.768354e+09     20s
+   56865   -2.5003226e+03   4.511724e+04   7.900177e+09     25s
+   63321   -2.3681453e+03   2.006658e+04   2.751947e+09     30s
+   68180   -2.3020105e+03   3.709231e+03   8.673281e+08     35s
+   73725   -1.0818735e+03   2.986078e+00   1.360861e+08     40s
+   75613   -1.0773274e+03   8.694787e-01   2.843746e+07     45s
+   77313   -1.0757734e+03   0.000000e+00   3.848690e+03     50s
+   79364   -9.7419774e+02   0.000000e+00   1.109675e+04     55s
+   81897   -8.0203813e+02   0.000000e+00   1.690738e+06     60s
+   88288   -6.8495172e+01   0.000000e+00   1.649204e+03     65s
+   90220   -1.8687602e+00   0.000000e+00   6.502724e+02     70s
+   94718    7.6491533e+01   0.000000e+00   1.466486e+04     76s
+   98466    1.1548304e+02   0.000000e+00   1.333458e+04     80s
+  101946    1.5460243e+02   0.000000e+00   5.528069e+03     85s
+  103586    1.6100189e+02   0.000000e+00   2.601797e+04     90s
+  105683    1.9094025e+02   0.000000e+00   2.686691e+04     95s
+  107562    2.0114872e+02   0.000000e+00   6.022803e+03    100s
+  109268    2.0924125e+02   0.000000e+00   6.638400e+03    105s
+  110646    2.1361098e+02   0.000000e+00   9.657320e+04    110s
+  112515    2.1903092e+02   0.000000e+00   1.018674e+04    115s
+  113605    2.2042598e+02   0.000000e+00   4.629989e+04    120s
+  115695    2.2463656e+02   0.000000e+00   1.855323e+03    125s
+  116884    2.2547346e+02   0.000000e+00   8.444246e+04    130s
+  118124    2.2619324e+02   0.000000e+00   1.548904e+04    135s
+  119594    2.2821447e+02   0.000000e+00   1.317271e+04    140s
+  121131    2.2972139e+02   0.000000e+00   8.721071e+04    145s
+  122478    2.3102444e+02   0.000000e+00   5.818072e+04    150s
+  123816    2.3243735e+02   0.000000e+00   2.272485e+04    155s
+  125424    2.3324192e+02   0.000000e+00   2.117611e+03    160s
+  126953    2.3413613e+02   0.000000e+00   1.974972e+04    165s
+  128282    2.3475106e+02   0.000000e+00   1.728857e+03    170s
+  130245    2.3591315e+02   0.000000e+00   3.050438e+05    175s
+  132500    2.3723547e+02   0.000000e+00   2.078999e+04    181s
+  133729    2.3768710e+02   0.000000e+00   1.492109e+04    185s
+  135924    2.3860310e+02   0.000000e+00   4.068293e+02    190s
+  138141    2.3929535e+02   0.000000e+00   2.648461e+05    195s
+  143482    2.4089412e+02   0.000000e+00   1.655477e+03    200s
+  145756    2.4114570e+02   0.000000e+00   4.254429e+02    205s
+  147795    2.4115826e+02   0.000000e+00   1.765836e+03    210s
+  150020    2.4127334e+02   0.000000e+00   4.873194e+02    215s
+Concurrent spin time: 0.15s
+
+Solved with dual simplex
+
+Root relaxation: objective 2.435964e+02, 118878 iterations, 214.68 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  243.59635    0  409          -  243.59635      -     -  224s
+H    0     0                     146.2202633  243.59635  66.6%     -  225s
+H    0     0                     229.9094232  243.59635  5.95%     -  225s
+     0     0  231.50447    0   79  229.90942  231.50447  0.69%     -  302s
+H    0     0                     231.3942424  231.50447  0.05%     -  304s
+     0     0  231.48103    0   93  231.39424  231.48103  0.04%     -  306s
+     0     0  231.48103    0   93  231.39424  231.48103  0.04%     -  306s
+     0     0  231.47756    0  101  231.39424  231.47756  0.04%     -  309s
+     0     0  231.47756    0   61  231.39424  231.47756  0.04%     -  315s
+H    0     0                     231.4158745  231.43885  0.01%     -  326s
+H    0     0                     231.4199932  231.43885  0.01%     -  326s
+H    0     0                     231.4205499  231.43885  0.01%     -  326s
+     0     0  231.43812    0   72  231.42055  231.43812  0.01%     -  326s
+
+Cutting planes:
+  Gomory: 8
+  Cover: 1
+  Implied bound: 2
+  MIR: 273
+  Flow cover: 57
+
+Explored 1 nodes (216085 simplex iterations) in 326.80 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 6: 231.421 231.42 231.416 ... 146.22
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.314205499330e+02, best bound 2.314381193004e+02, gap 0.0076%
+case =
+16
+case =
+16
+x=
+2-dimensional DenseAxisArray{Float64,2,...} with index sets:
+    Dimension 1, ["Plant", "Solar panel", "Wind Turbine"]
+    Dimension 2, ["r1", "r2", "r3", "r4", "r5"]
+And data, a 3×5 Matrix{Float64}:
+ 0.0  1.0   0.0   0.0  0.0
+ 0.0  3.0   0.0  -0.0  0.0
+ 0.0  3.0  -0.0   0.0  0.0
+nt=
+2-dimensional DenseAxisArray{Float64,2,...} with index sets:
+    Dimension 1, Any[("r1", "r2"), ("r1", "r3"), ("r1", "r4"), ("r1", "r5"), ("r1", "ru"), ("r2", "r3"), ("r2", "r4"), ("r2", "r5"), ("r2", 
+"ru"), ("r3", "r4"), ("r3", "r5"), ("r3", "ru"), ("r4", "r5"), ("r4", "ru"), ("r5", "ru")]
+    Dimension 2, Base.OneTo(3)
+And data, a 15×3 Matrix{Float64}:
+  0.0   0.0   0.0
+ -0.0  -0.0  -0.0
+  0.0  -0.0   0.0
+  0.0  -0.0  -0.0
+ -0.0  -0.0   0.0
+ -0.0   0.0   0.0
+  0.0  -0.0   0.0
+ -0.0  -0.0  -0.0
+  1.0  -0.0   1.0
+  0.0   0.0   0.0
+ -0.0  -0.0   0.0
+  0.0   0.0   0.0
+ -0.0   0.0   0.0
+ -0.0  -0.0  -0.0
+ -0.0   0.0   0.0
+Total material cost =
+462786.5560168823
+only material cost =
+462786.5560168823
+Transportation cost =
+4350.118997060525
+Electricity cost =
+-19036.28692223749
+FIXOP cost =
+45389.83333333333
+FIXOP_l cost =
+0.0
+CAPEX cost =
+200485.76722087592
+CAPEX_l =
+176.57345481171984
+julia> 
+julia> value.(m[:dec])
+1-dimensional DenseAxisArray{Float64,1,...} with index sets:
+    Dimension 1, ["r1", "r2", "r3", "r4", "r5"]
+And data, a 5-element Vector{Float64}:
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
