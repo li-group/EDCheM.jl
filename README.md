@@ -7,9 +7,9 @@ The various subdirectories are described below:
   •	Example_1/ , a system consisting of  20 candidate locations in Western Texas where chlor akali plants, solar panels (1500 KW) and wind turbines (100 KW)
 3.	docs/ Contains source files for documentation pertaining to the model.
 
-#Requirements
+## Requirements
 
-#Running an Instance of code
+## Running an Instance of code
 1.	Download or clone the GenX repository on your machine. For this tutorial it will be assumed to be within your home directory: /home/youruser/DCheM-MILP
 Creating the Julia environment and installing dependencies
 2.	Start a terminal and navigate into the DCheM-MILP folder.
