@@ -16,7 +16,13 @@ using JuMP
 import Gurobi
 using Dates
 root = pwd()
-Example_folder = "Example_1"
+print("Enter name of the data folder \n\n") 
+  
+# Calling rdeadline() function
+name = readline()
+
+Example_folder = name
+println("Starting Implementation")
 cd("../")
 rootn = pwd()
 cd(root)

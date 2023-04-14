@@ -41,7 +41,7 @@ for i = 1:nrow(df_nt1)
     nt_aggdone[(String.(df_nt1[i,1]),String.(df_nt1[i,2]))] = df_nt1[i,3]
   end
 end
-=
+
 df_nt2 = DataFrame(CSV.File(joinpath(root,"deagg/ntmatch1.csv"),header=false))
 tagg = []
 for i = 1:nrow(df_nt2)
@@ -283,7 +283,7 @@ p_flow = value.(m[:p_flow])
 p_cu = value.(m[:p_cu])
 p_flowext = value.(m[:p_flowext])
 V_flow = value.(m[:V_flow])
-
+using Serialization
 serialize("Variables/x.jls",x)
 serialize("Variables/y.jls",y)
 serialize("Variables/z.jls",z)
