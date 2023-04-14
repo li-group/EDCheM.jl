@@ -101,7 +101,7 @@ function cluskm(n_k,n_loc)
         if(nrow(gdf_m[j])==24)
             s = gdf_m[j]
             #print(size((s[1,"Day"].==Y1).*(s[1,"Month"].==Y2)))
-            ye = s[1,"year"]-(minimum(years)-1)
+            ye = s[1,"year"]
             #println(ye)
             p1 = reshape(s[:,"Price"]*infl[ye]*(10^(-3)),(1,24))
             ind = (s[1,"Day"].==Y1).*(s[1,"Month"].==Y2).*(s[1,"year"].==Y3)

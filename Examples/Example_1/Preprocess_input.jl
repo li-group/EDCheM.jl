@@ -78,14 +78,17 @@ df_parampath = joinpath(rootn,"Examples",Example_folder,"datahalf.csv")
 solar_folder = joinpath(rootn,"Examples",Example_folder,"solar100output")
 wind_folder = joinpath(rootn,"Examples",Example_folder,"wind100output")
 years = [2011,2012,2013]
-infl = [(2.07/100+1)*(1.46/100+1),(1.46/100+1),1]*(1+24.10/100)#Add values for all years in between first and last year
+infl = Dict()
+infl[2011] = (2.07/100+1)*(1.46/100+1)*(1+24.10/100)
+infl[2012] = (1.46/100+1)*(1+24.10/100)
+infl[2013] = (1+24.10/100)
 Dem = DataFrame(CSV.File(joinpath(rootn,"Examples",Example_folder,"Demand.csv")))
 D= Dict()
 for i in 1:nrow(Dem)
    D[(Dem[i,:Chemical],Dem[i,:Consumer],Dem[i,:Month])] = Dem[i,:Demand]
 end
 
-
+Qb = 80000
 
 include(joinpath(rootn,"src","kmeansalg.jl"))
 w = Dict()
