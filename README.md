@@ -9,12 +9,16 @@ The various subdirectories are described below:
 
 ## Requirements
 Run the following code on the directory
+  ```
   julia Install.jl
+  ```
 ## Running an Instance of code
 1.	Store your example in a folder in the Examples Folder in a format similar to that of Example_1
 2.	Move to the src folder on EDCheM.jl and run the algo.jl file. The following is the way:
+  ```
   cd ./src
   julia algo.jl
+  ```
 3. When prompted for the data folder enter the name of the folder required
 
 After solving the aggregated problem, a directory called "Agg_val" is created in src where the variables required from this step in the next step is stored. A folder called deagg is then created where during and after disaggregating each cluster, the log files and required values for  the next step in the form of a csv file are stored.
