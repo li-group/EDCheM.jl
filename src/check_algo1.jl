@@ -144,13 +144,13 @@ for i in keys(nt_aggmatch1)
   end
 end
 for(i,j) in tagg
-  @constraint(model,nagg[(i,j)]<=8*p[(i,j)])
+  @constraint(model,nagg[(i,j)]<=100*p[(i,j)])
 end
 for i in locno
   j = nlocno[i]
   if(length(j)>=1)
-    @constraint(model,sum(p[j])<=0.95+22*q[i])
-    @constraint(model,sum(p[j])>=1.05-22*(1-q[i]))
+    @constraint(model,sum(p[j])<=100*q[i])
+    @constraint(model,sum(p[j])>=2-2*(1-q[i]))
   end
 end
 
