@@ -5,7 +5,6 @@ using Clustering
 using FileIO
 using JuMP
 using Random
-using MPI
 import Gurobi
 using Dates
 root = pwd()
