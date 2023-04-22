@@ -3,15 +3,9 @@ using CSV
 using Statistics
 using Clustering
 using FileIO
-using DataFrames
-using CSV
-using Statistics
-using Clustering
-using FileIO
-using JuMP, Ipopt
+using JuMP
 using Random
 using MPI
-using JuMP
 import Gurobi
 using Dates
 root = pwd()
