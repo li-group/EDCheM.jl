@@ -1,5 +1,5 @@
 # EDCheM.jl
-To alleviate the greenhouse gas emissions by the chemical industry, electrification has been proposed as a solution where electricity from renewable sources is used to power processes. The adoption of renewable energy is complicated by its spatial and temporal variations.  To address this challenge, we investigate the potential of distributed manufacturing of electrified chemical processes installed in a microgrid. We have proposed a multiscale MILP (Mixed Integer Linear Programming) model for locating modular electrified plants and transmission lines in a microgrid that includes monthly transportation and hourly scheduling decisions. We have also proposed a K-means clustering-based aggregation and disaggregation algorithm to solve the model efficiently. Details of the model and algorithm are given in the paper ... 
+This package implement an MILP model and aggregation-disaggregation algorithm for solving a multi-scale facility location problem of electrified chemical processes. The details of the algorithm can be found in the [preprint]()
 
 The various subdirectories are described below:
 1.	src/ Contains the core model code for parameter generation, model generation, and solving the model using algorithm.
@@ -8,10 +8,11 @@ The various subdirectories are described below:
 
 
 ## Requirements
-Run the following code on the directory
+Run the following code on the directory to install the julia packages
   ```
   julia Install.jl
   ```
+  In addition, follow the instructions on [Gurobi.jl](https://github.com/jump-dev/Gurobi.jl) to install the solver Gurobi.
 ## Running an Instance of code
 1.	Store your example in a folder in the Examples Folder in a format similar to that of Example_1
 2.	Move to the src folder on EDCheM.jl and run the algo.jl file. The following is the way:
