@@ -19,8 +19,7 @@ function clus_agg(Xmod,n_clus)
 		    end
 		end
     end	
-    #y1 = [2, 2, 5, 3, 5, 5, 4, 5, 5, 2, 1, 1, 5, 5, 5, 4, 1, 1, 1, 1]
-    #yc = [6, 3, 1, 2, 8]
+
 
 	root = pwd()
 	open(joinpath(root,"./Agg_val/agg_clus_no.txt"),"a") do io
