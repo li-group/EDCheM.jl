@@ -284,6 +284,7 @@ p_cu = value.(m[:p_cu])
 p_flowext = value.(m[:p_flowext])
 V_flow = value.(m[:V_flow])
 using Serialization
+mkdir("Variables")
 serialize("Variables/x.jls",x)
 serialize("Variables/y.jls",y)
 serialize("Variables/z.jls",z)
