@@ -55,41 +55,26 @@ function cluskm(n_k,n_loc)
    #lisloc = [48,49,35,36,40,29,30,31,34,10,2,99,25,84,78,37,26,92,93,94]
    lisloc = 1:n_loc
     i = 1
-    X_s = []
+    X_v = Dict()
+    for path_fol in poweroutput_path
     for y in years
-        s1 = DataFrame(CSV.File(joinpath(solar_folder, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
+        s1 = DataFrame(CSV.File(joinpath(path_fol, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
         X_s = vcat(X_s,s1[:,3])
         #println(size(X_s))
     end
     for i = 2:n_loc
         X_s1 = []
        for y in years
-         s1 = DataFrame(CSV.File(joinpath(solar_folder, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
+         s1 = DataFrame(CSV.File(joinpath(path_fol, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
          X_s1 = vcat(X_s1,s1[:,3])
        end
        println(size(X_s1))
-       X_s = cat(X_s,X_s1,dims=2)
+       X_v[path_fol] = cat(X_s,X_s1,dims=2)
         
         #print(maximum(X_s))
     end
-    i = 1
-    X_w = []
-    #s1 = DataFrame(CSV.File(joinpath(wind_folder, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
-    for y in years
-        s1 = DataFrame(CSV.File(joinpath(wind_folder, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
-        X_w = vcat(X_w,s1[:,3])
     end
-    for i = 2:n_loc
-        #s1 = DataFrame(CSV.File(joinpath(wind_folder, "r"*string(lisloc[i])*"_2011.csv")))
-        X_w1 = []
-        for y in years
-            s1 = DataFrame(CSV.File(joinpath(wind_folder, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
-            X_w1 = vcat(X_w1,s1[:,3])
-        end
-        X_w = cat(X_w,X_w1,dims=2)
-    end
-    print(size(X_s))
-    print(size(X_w))
+   
     
     for i in m
         X = []
@@ -106,9 +91,12 @@ function cluskm(n_k,n_loc)
             p1 = reshape(s[:,"Price"]*infl[ye]*(10^(-3)),(1,24))
             ind = (s[1,"Day"].==Y1).*(s[1,"Month"].==Y2).*(s[1,"year"].==Y3)
             #print(size(X_w[ind,:]))
-            so  = reshape(X_s[ind,:],(1,24*n_loc))
-            sw  = reshape(X_w[ind,:],(1,24*n_loc))
-            x_d = cat(p1,so,sw,dims=2)
+            x_d = p1
+            for path_fol in poweroutput_path
+                X_p = X_v[path_fol]
+                sp  = reshape(X_p[ind,:],(1,24*n_loc))
+                x_d = cat(p1,so,sw,dims=2)
+            end
             #print(sum(ind))
             X = cat(X,x_d,dims=1)
             #print(size(x_d))
@@ -116,12 +104,21 @@ function cluskm(n_k,n_loc)
         end
     end
         X = X.*(X.>=0)
-        ns = [[Statistics.mean(X[:,1:24]),Statistics.std(X[:,1:24])] [Statistics.mean(X[:,25:24+n_loc*24]),Statistics.std(X[:,25:24+n_loc*24])] [Statistics.mean(X[:,25+n_loc*24:24+n_loc*24*2]),Statistics.std(X[:,25+n_loc*24:24+n_loc*24*2])]]
+        ns = [[Statistics.mean(X[:,1:24]),Statistics.std(X[:,1:24])]]
+        i = 1
+        for path_fol in poweroutput_path
+            nsn = [Statistics.mean(X[:,25+(i-1)*n_loc*24:24+n_loc*24*i]),Statistics.std(X[:,25+(i-1)*n_loc*24:24+n_loc*24*i])]
+            push!(ns,nsn)
+            i = i+1
+        end
         push!(normstat,ns)
-    println(Statistics.std(X_s))
+        println(Statistics.std(X_s))
+        i = 1
         X[:,1:24] = (X[:,1:24].-ns[1,1])/(ns[2,1])
-        X[:,25:24+n_loc*24] = (X[:,25:24+n_loc*24].-ns[1,2])/(ns[2,2])
-        X[:,25+n_loc*24:24+n_loc*24*2] = (X[:,25+n_loc*24:24+n_loc*24*2].-ns[1,3])/(ns[2,3])
+        for path_fol in poweroutput_path
+            X[:,25+(i-1)*n_loc*24:24+n_loc*24*i] = (X[:,25+(i-1)*n_loc*24:24+n_loc*24*i]-ns[1,i+1])/ns[2,i+1]
+            i = i+1
+        end
         X = transpose(X)
         clus = kmeans(X, n_k,display=:final,maxiter = 1000)
         push!(data_clus,clus)
