@@ -116,7 +116,7 @@ for t = 1:n_tm
         if (P_og[(component[2],"r"*string(q),t,k,h)]<=1)
           P_og[(component[2],"r"*string(q),t,k,h)] = 0
         end
-        P_og[(component[3],"r"*string(q),t,k,h)] = cen[24+120+(q-1)*24+h,k]*ns1[2,3]+ns1[1,3]
+        P_og[(component[3],"r"*string(q),t,k,h)] = cen[24+480+(q-1)*24+h,k]*ns1[2,3]+ns1[1,3]
         if (P_og[(component[3],"r"*string(q),t,k,h)]<=1)
           P_og[(component[3],"r"*string(q),t,k,h)] = 0
         end
