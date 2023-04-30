@@ -76,9 +76,10 @@ files_power = [joinpath(rootn,"Examples",Example_folder,"powergen.csv")]
 files_l = [joinpath(rootn,"Examples",Example_folder,"transmission.csv")]
 df_parampath = joinpath(rootn,"Examples",Example_folder,"datahalf.csv")
 poweroutput_path = []
-poweroutput_path[solar_folder,wind_folder]
 solar_folder = joinpath(rootn,"Examples",Example_folder,"solar100output")
 wind_folder = joinpath(rootn,"Examples",Example_folder,"wind100output")
+poweroutput_path[solar_folder,wind_folder]
+
 years = [2011,2012,2013]
 infl = Dict()
 infl[2011] = (2.07/100+1)*(1.46/100+1)*(1+24.10/100)
