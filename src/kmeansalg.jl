@@ -57,22 +57,24 @@ function cluskm(n_k,n_loc)
     i = 1
     X_v = Dict()
     for path_fol in poweroutput_path
+        X_s = []
     for y in years
         s1 = DataFrame(CSV.File(joinpath(path_fol, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
         X_s = vcat(X_s,s1[:,3])
         #println(size(X_s))
     end
+
     for i = 2:n_loc
-        X_s1 = []
+       X_s1 = []
        for y in years
          s1 = DataFrame(CSV.File(joinpath(path_fol, "r"*string(lisloc[i])*"_"*string(y)*".csv")))
          X_s1 = vcat(X_s1,s1[:,3])
        end
        println(size(X_s1))
-       X_v[path_fol] = cat(X_s,X_s1,dims=2)
-        
+       X_s = cat(X_s,X_s1,dims=2)    
         #print(maximum(X_s))
     end
+    X_v[path_fol] = X_s
     end
    
     
@@ -94,8 +96,9 @@ function cluskm(n_k,n_loc)
             x_d = p1
             for path_fol in poweroutput_path
                 X_p = X_v[path_fol]
+                print(size(X_p))
                 sp  = reshape(X_p[ind,:],(1,24*n_loc))
-                x_d = cat(p1,so,sw,dims=2)
+                x_d = cat(x_d,sp,dims=2)
             end
             #print(sum(ind))
             X = cat(X,x_d,dims=1)
@@ -112,11 +115,11 @@ function cluskm(n_k,n_loc)
             i = i+1
         end
         push!(normstat,ns)
-        println(Statistics.std(X_s))
+        println(ns)
         i = 1
-        X[:,1:24] = (X[:,1:24].-ns[1,1])/(ns[2,1])
+        X[:,1:24] = (X[:,1:24].-(ns[1])[1])/(ns[1])[2]
         for path_fol in poweroutput_path
-            X[:,25+(i-1)*n_loc*24:24+n_loc*24*i] = (X[:,25+(i-1)*n_loc*24:24+n_loc*24*i]-ns[1,i+1])/ns[2,i+1]
+            X[:,25+(i-1)*n_loc*24:24+n_loc*24*i] = (X[:,25+(i-1)*n_loc*24:24+n_loc*24*i].-(ns[i+1])[1])/(ns[i+1])[2]
             i = i+1
         end
         X = transpose(X)
@@ -131,5 +134,5 @@ cd(root)
 using FileIO
 #FileIO.save(joinpath(root,"Generator-data","kmeanval20_1.jld2"),"clus",clus)
 #FileIO.save(joinpath(root,"Generator-data","kmeanave20_1.jld2"),"ns",ns)
-clus = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanval20.jld2"),"clus")
-ns = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanave20.jld2"),"ns")
+#clus = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanval20.jld2"),"clus")
+#ns = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanave20.jld2"),"ns")
