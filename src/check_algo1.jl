@@ -145,6 +145,7 @@ for i in keys(nt_aggmatch1)
 end
 for(i,j) in tagg
   @constraint(model,nagg[(i,j)]<=100*p[(i,j)])
+  @constraint(model,nagg[(i,j)]>=p[(i,j)])
 end
 for i in locno
   j = nlocno[i]
