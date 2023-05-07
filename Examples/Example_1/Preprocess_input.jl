@@ -93,7 +93,7 @@ end
 
 Qb = 80000
 
-include(joinpath(rootn,"src","kmeansalg1.jl"))
+include(joinpath(rootn,"src","kmeansalg.jl"))
 w = Dict()
 for i = 1:n_tm
     ck = clus[i]
