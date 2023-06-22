@@ -1,5 +1,9 @@
 root = pwd()
-df_x = DataFrame(CSV.File(joinpath(root,"deagg/x1.csv"),header=false))
+if(isfile((joinpath(root,"deagg/x1.csv")))==true)
+  df_x = DataFrame(CSV.File(joinpath(root,"deagg/x1.csv"),header=false))
+else
+  df_x = DataFrame()
+end
 #print(df_x)
 x_val = Dict()
 for i = 1:nrow(df_x)
