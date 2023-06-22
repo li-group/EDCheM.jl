@@ -31,7 +31,11 @@ for i in Location
     push!(locno,i)
   end
 end
-df_nt1 = DataFrame(CSV.File(joinpath(root,"deagg/ntdone1.csv"),header=false))
+if(isfile((joinpath(root,"deagg/ntdone1.csv")))==true)
+  df_nt1 = DataFrame(CSV.File(joinpath(root,"deagg/ntdone1.csv"),header=false))
+else
+  df_nt1 = DataFrame()
+end
 trline = []
 nt_aggdone = Dict()
 nt_aggmatch = Dict()
@@ -41,8 +45,11 @@ for i = 1:nrow(df_nt1)
     nt_aggdone[(String.(df_nt1[i,1]),String.(df_nt1[i,2]))] = df_nt1[i,3]
   end
 end
-
-df_nt2 = DataFrame(CSV.File(joinpath(root,"deagg/ntmatch1.csv"),header=false))
+if(isfile((joinpath(root,"deagg/ntmatch1.csv")))==true)
+  df_nt2 = DataFrame(CSV.File(joinpath(root,"deagg/ntmatch1.csv"),header=false))
+else
+  df_nt2 = DataFrame()
+end
 tagg = []
 for i = 1:nrow(df_nt2)
   a = df_nt2[i,3]
@@ -241,9 +248,9 @@ for loc in Location
 		for t= 1:n_tm
 			for k = 1:n_k
 				for h = 1:n_s
-					set_binary(y_1[i,loc,mo,t,k,h])
+					set_integer(y_1[i,loc,mo,t,k,h])
 					for mo1 in modes
-						set_binary(z_1[i,loc,mo,mo1,t,k,h])
+						set_integer(z_1[i,loc,mo,mo1,t,k,h])
 					end
 				end
 			end
