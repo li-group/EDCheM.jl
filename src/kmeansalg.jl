@@ -132,7 +132,8 @@ end
 clus,ns= cluskm(n_rep,n_loc_og)
 cd(root)
 using FileIO
-#FileIO.save(joinpath(root,"Generator-data","kmeanval20_1.jld2"),"clus",clus)
-#FileIO.save(joinpath(root,"Generator-data","kmeanave20_1.jld2"),"ns",ns)
+using FileIO
+#FileIO.save(joinpath(rootn,"Examples",Example_folder,"kmeanval20.jld2"),"clus",clus)
+#FileIO.save(joinpath(rootn,"Examples",Example_folder,"kmeanave20.jld2"),"ns",ns)
 #clus = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanval20.jld2"),"clus")
 #ns = FileIO.load(joinpath(rootn,"Examples",Example_folder,"kmeanave20.jld2"),"ns")
