@@ -1,9 +1,5 @@
 root = pwd()
-if(isfile((joinpath(root,"deagg/x1.csv")))==true)
-  df_x = DataFrame(CSV.File(joinpath(root,"deagg/x1.csv"),header=false))
-else
-  df_x = DataFrame()
-end
+df_x = DataFrame(CSV.File(joinpath(root,"deagg/x1.csv"),header=false))
 #print(df_x)
 x_val = Dict()
 for i = 1:nrow(df_x)
@@ -40,6 +36,7 @@ if(isfile((joinpath(root,"deagg/ntdone1.csv")))==true)
 else
   df_nt1 = DataFrame()
 end
+
 trline = []
 nt_aggdone = Dict()
 nt_aggmatch = Dict()
@@ -47,8 +44,12 @@ for i = 1:nrow(df_nt1)
   if !((String.(df_nt1[i,1]),String.(df_nt1[i,2])) in trline)
     push!(trline,(String.(df_nt1[i,1]),String.(df_nt1[i,2])))
     nt_aggdone[(String.(df_nt1[i,1]),String.(df_nt1[i,2]))] = df_nt1[i,3]
+    if(String.(df_nt1[i,1]) !="ru" && String.(df_nt1[i,2]) !="ru" )
+        nt_aggmatch[[(String.(df_nt1[i,1]),String.(df_nt1[i,2]))]] = df_nt1[i,3]
+      end
   end
 end
+
 if(isfile((joinpath(root,"deagg/ntmatch1.csv")))==true)
   df_nt2 = DataFrame(CSV.File(joinpath(root,"deagg/ntmatch1.csv"),header=false))
 else
@@ -59,6 +60,7 @@ for i = 1:nrow(df_nt2)
   a = df_nt2[i,3]
   a = strip(a,['A','n','y','[',']'])
   b = split(a, ",")
+  d = String.(df_nt2[i,2])
   for j in 1:length(b)
     c = b[j]
     for k in 1:length(c)
@@ -76,13 +78,23 @@ for i = 1:nrow(df_nt2)
     end
   end
   t1 = []
+  t2 = []
   for j in 1:length(b)
       push!(tagg,(String.(df_nt2[i,1]),b[j]))
       push!(t1,(String.(df_nt2[i,1]),b[j]))
+      push!(t2,b[j])
   end
-  nt_aggmatch[t1] = df_nt2[i,4]
+  println(d)
+  println(String.(df_nt2[i,1]))
+  f = 0
+  for j in t2
+    f = f+sum(x_val[j])
+  end
+  if(sum(x_val[String.(df_nt2[i,1])])>0 && f>0)
+    nt_aggmatch[t1] = df_nt2[i,4]
+  end
 end
-println(tagg)
+println(nt_aggmatch)
 tagg = []
 nt_aggmatch1 = Dict()
 for i in keys(nt_aggmatch)
@@ -101,6 +113,8 @@ for i in keys(nt_aggmatch)
     end
 nt_aggmatch1[s1] = q1
 end
+
+
 println("tagg")
 println(tagg)
 println("nt_aggmatch1")
@@ -121,6 +135,7 @@ for (i,j) in tagg
     #@constraint(model,nagg[(i,j)]==nagg[(j,i)])
   end
 end
+
 for i in locno
   t1 = []
   for j in tagg
@@ -155,14 +170,14 @@ for i in keys(nt_aggmatch1)
   end
 end
 for(i,j) in tagg
-  @constraint(model,nagg[(i,j)]<=100*p[(i,j)])
-  @constraint(model,nagg[(i,j)]>=p[(i,j)])
+  @constraint(model,nagg[(i,j)]<=8*p[(i,j)])
+   @constraint(model,nagg[(i,j)]>=p[(i,j)])
 end
 for i in locno
   j = nlocno[i]
   if(length(j)>=1)
-    @constraint(model,sum(p[j])<=100*q[i])
-    @constraint(model,sum(p[j])>=2*q[i])
+    @constraint(model,sum(p[j])<=0.95+22*q[i])
+    @constraint(model,sum(p[j])>=1.05-22*(1-q[i]))
   end
 end
 
@@ -170,6 +185,8 @@ dist = cal_dist(df_loc)
 @objective(model,Min,sum(dist[i]*nagg[i] for i in tagg))
 optimize!(model)
 n_aggval = value.(model[:nagg])
+println(value.(model[:p]))
+println(value.(model[:q]))
 for i in tagg
     if(n_aggval[i]>0)
         push!(trline,i)
@@ -216,13 +233,33 @@ for (i,j) in t_del
 end
 
 println(trline)
+trline1 = trline
+for i in Location
+  a = 0
+  if(sum(x_val[i])>0)
+    for j in trline1
+      if(i in j)
+        a = 1
+      end
+    end
+    if(a==0)
+      push!(trline,(i,"ru"))
+      push!(trline,("ru",i))
+      nt_aggdone[(i,"ru")] = 1
+      nt_aggdone[("ru",i)] = 1
+    end
+  end
+end
 plan_max = Dict()
+
+trline = union(trline)
+
 
 for i in Location
   plan_max[(i)] = max_pl
 end 
 n_lij_og = maximum(yc)
-
+#n_bun_og = 8
 ntbun = Dict()
 for (i,j) in trline
   ntbun[(i,j)] = n_bun_og
@@ -244,22 +281,24 @@ for i in trline
     @constraint(m,nt[i,:].==c1)
 end
 
+println(x_val)
+println(nt_aggdone)
 y_1 = m[:y_1]
 z_1 = m[:z_1]
 for i in plant
 for loc in Location
-	for mo in modes
-		for t= 1:n_tm
-			for k = 1:n_k
-				for h = 1:n_s
-					set_integer(y_1[i,loc,mo,t,k,h])
-					for mo1 in modes
-						set_integer(z_1[i,loc,mo,mo1,t,k,h])
-					end
-				end
-			end
-		end
-	end
+  for mo in modes
+    for t= 1:n_tm
+      for k = 1:n_k
+        for h = 1:n_s
+          set_integer(y_1[i,loc,mo,t,k,h])
+          for mo1 in modes
+            set_integer(z_1[i,loc,mo,mo1,t,k,h])
+          end
+        end
+      end
+    end
+  end
 end
 end
 set_optimizer_attribute(m,"PreDual",2)
@@ -295,6 +334,8 @@ p_flow = value.(m[:p_flow])
 p_cu = value.(m[:p_cu])
 p_flowext = value.(m[:p_flowext])
 V_flow = value.(m[:V_flow])
+
+
 using Serialization
 mkdir("Variables")
 serialize("Variables/x.jls",x)
