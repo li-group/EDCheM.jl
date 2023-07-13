@@ -19,8 +19,10 @@ function clus_agg(Xmod,n_clus)
 		    end
 		end
     end	
-
-
+    #y1 = [2, 2, 5, 3, 5, 5, 4, 5, 5, 2, 1, 1, 5, 5, 5, 4, 1, 1, 1, 1]
+    #yc = [6, 3, 1, 2, 8]
+    #y1 = [1, 1, 2, 3, 2, 2, 4, 2, 2, 1, 5, 5, 2, 2, 2, 4, 5, 5, 5, 5]
+    #yc = [3, 8, 1, 2, 6]
 	root = pwd()
 	open(joinpath(root,"./Agg_val/agg_clus_no.txt"),"a") do io
 	  println(io,y1)
@@ -65,14 +67,22 @@ function clus_agg(Xmod,n_clus)
 	for i = 1:n_loc
     	plan_max[(Location[i])] = yc[i]*max_pl #Maximum number of plants in a location
 	end
-	plan_max[("ru")] = max_pl
+	plan_max[("ru")] = max_pl*100
 	P = Dict()
 	n_bun_agg = Dict()
+	open(joinpath(root,"./Agg_val/agg_clus_no.txt"),"a") do io
+	  	println(io,size(P3))
+	end
 	P = AssignP(P3,P,Location_tr)
 	n_bun = Dict()
 	for (i,j) in trline
-		n_bun_agg[(i,j)] = max(plan_max[i],plan_max[j])*n_bun_og #Bundle the plants
-    	n_bun[(i,j)] = n_bun_agg[(i,j)]
+		if(i=="ru" || j=="ru")
+			n_bun_agg[(i,j)] = n_bun_og #Bundle the plants
+    		n_bun[(i,j)] = n_bun_agg[(i,j)]
+    	else
+			n_bun_agg[(i,j)] = Int(max(plan_max[i],plan_max[j])*n_bun_og/max_pl) #Bundle the plants
+    		n_bun[(i,j)] = n_bun_agg[(i,j)]
+    	end
 	end
   
 	Param = gendata(n_bun,trline,Location,dist)
@@ -81,7 +91,7 @@ function clus_agg(Xmod,n_clus)
     m = modgen(n_loc,Location,Location_tr,trline,Param,plan_max,maximum(yc),maximum(values(n_bun_agg)))
     nt = m[:nt]
        for (p,v) in trline
-		for j in 1+min(plan_max[p],plan_max[v]):maximum(yc) #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
+		for j in 1+Int(min(plan_max[p],plan_max[v])/max_pl):maximum(yc) #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
 			if(j>0)
 			    @constraint(m,nt[(p,v),j] .== 0)
 			end
@@ -93,7 +103,9 @@ function clus_agg(Xmod,n_clus)
     set_optimizer_attribute(m,"Method",2)
 	#set_optimizer_attribute(m,"DegenMoves",0)
     set_optimizer_attribute(m,"BarHomogeneous",1)
-	set_optimizer_attribute(m, "MIPGap", 0.01)
+	set_optimizer_attribute(m, "MIPGap", 0.006)
+	#set_optimizer_attribute(m,"NumericFocus",3)
+	set_optimizer_attribute(m,"Cuts",0)
 	#undo = relax_integrality(m)
 	optimize!(m)
 	x = value.(m[:x])
