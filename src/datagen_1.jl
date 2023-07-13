@@ -16,11 +16,11 @@ for t = 1:n_tm
 
       #Ce[(t,k,h)] = cen[h,k]*ns1[2,1]+ns1[1,1]
       for q in 1:n_loc
-        P[(component[2],Location_tr[q],t,k,h)] = P3[b1]
+        P[(component[2],Location_tr[q],t,k,h)] = P3[b1,q]
         if (P[(component[2],Location_tr[q],t,k,h)]<=1)
           P[(component[2],Location_tr[q],t,k,h)] = 0
         end
-        P[(component[3],Location_tr[q],t,k,h)] = P3[b1+1440]
+        P[(component[3],Location_tr[q],t,k,h)] = P3[b1+1440,q]
         if (P[(component[3],Location_tr[q],t,k,h)]<=1)
           P[(component[3],Location_tr[q],t,k,h)] = 0
         end
