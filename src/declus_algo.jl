@@ -15,7 +15,7 @@ global xagg = Dict()
 Loc1 = Dict()
 global trline_toadd = Dict()
 for i =1:n_clus
-	xagg[Loc_agg[i]] = x_agg[:,Loc_agg[i]]
+	xagg[Loc_agg[i]] = round.(x_agg[:,Loc_agg[i]])
 	Loc1[Loc_agg[i]] = Loc_agg
 	trline_toadd[Loc_agg[i]] = []
 end
@@ -23,7 +23,7 @@ ntagg = Dict()
 global ntbun = Dict()
 for (i,j) in trline_agg
 	if(sum(nt_agg[(i,j),:])>=1)
-		ntagg[(i,j)]  = sum(nt_agg[(i,j),:])
+		ntagg[(i,j)]  = round(sum(nt_agg[(i,j),:]))
 		ntbun[(i,j)]  = n_bun_agg[(i,j)]
 	end
 end
@@ -90,14 +90,14 @@ function clus_deagg(c_val,n1)
 		      	  push!(trline,Tuple([Location_tr[j],Location_tr[i]]))
 		      	 
 		      	  if (Location_tr[j]=="ru")
-		      	  	ntbun[Tuple([Location_tr[i],Location_tr[j]])] = n_bun_og*planmax[Location_tr[i]]
-		      	  	ntbun[Tuple([Location_tr[j],Location_tr[i]])] = n_bun_og*planmax[Location_tr[i]]
-		      	  elseif (planmax[Location_tr[i]]==1 || planmax[Location_tr[j]]==1)
+		      	  	ntbun[Tuple([Location_tr[i],Location_tr[j]])] = n_bun_og*Int(planmax[Location_tr[i]]/max_pl)
+		      	  	ntbun[Tuple([Location_tr[j],Location_tr[i]])] = n_bun_og*Int(planmax[Location_tr[i]]/max_pl)
+		      	  elseif (planmax[Location_tr[i]]==1*max_pl || planmax[Location_tr[j]]==1*max_pl)
 		      	  	ntbun[Tuple([Location_tr[i],Location_tr[j]])] = n_bun_og
 		      	  	ntbun[Tuple([Location_tr[j],Location_tr[i]])] = n_bun_og
                     else
-                  ntbun[Tuple([Location_tr[i],Location_tr[j]])] =  max(planmax[Location_tr[i]],planmax[Location_tr[j]])*n_bun_og
-		      	  ntbun[Tuple([Location_tr[j],Location_tr[i]])] = max(planmax[Location_tr[i]],planmax[Location_tr[j]])*n_bun_og
+                  ntbun[Tuple([Location_tr[i],Location_tr[j]])] =  Int(max(planmax[Location_tr[i]],planmax[Location_tr[j]])*n_bun_og/max_pl)
+		      	  ntbun[Tuple([Location_tr[j],Location_tr[i]])] = Int(max(planmax[Location_tr[i]],planmax[Location_tr[j]])*n_bun_og/max_pl)
 		      	end
 		      end
 		    end
@@ -114,9 +114,19 @@ function clus_deagg(c_val,n1)
 			if(sum(nt_agg[(i,j),:])>=1)
 				ntbun[(i,j)]  = n_bun_agg[(i,j)]
 			end
+			#if((i,j) ! in trline)
+				#push!(trline,(i,j))
+			#end
 		end
 		println(ntbun)
         print(size(P3))
+        println(trline)
+        println(size(trline))
+
+		open(joinpath(root,"check_tr.txt"),"a") do io
+			println(io,trline)
+			println(io,trline_agg)
+		end
         Location_clus = cat(Location,"ru",Consumer_supplier,dims = 1)
 		Latitude = cat(P3[n_rep*n_s*n_tm*length(powergen)+1,:],df_loc[n_loc_og+1:end,"Latitude"],dims = 1)
 		Longitude = P3[n_rep*n_s*n_tm*length(powergen)+2,:]
@@ -161,15 +171,15 @@ function clus_deagg(c_val,n1)
 			end
 		end
 		for (p,v) in trline
-			if !((p,v) in trline_toadd[c_val])
-				if (p=="ru"||v=="ru"||(planmax[p]!=1 && planmax[v]!=1))  #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
-					for j in 1+min(planmax[p],planmax[v]):maximum(yc)
+			if !((p,v) in trline_toadd[c_val] ||(p,v) in trline_agg)
+				if (p=="ru"||v=="ru"||(planmax[p]!=max_pl && planmax[v]!=max_pl))  #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
+					for j in 1+Int(min(planmax[p],planmax[v])/max_pl):maximum(yc)
 						if(j>0)
 						@constraint(m,nt[(p,v),j] .== 0)
 						end
 					end
 				else
-					for j in max(planmax[p],planmax[v])+1:maximum(yc) #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
+					for j in Int(max(planmax[p],planmax[v])/max_pl)+1:maximum(yc) #Rough estimate of 1 tranmsission line per pair of locations. Can be more but this is just an approximation
 						if(j>0)
 						@constraint(m,nt[(p,v),j] .== 0)
 						end
@@ -184,7 +194,7 @@ function clus_deagg(c_val,n1)
 						for t= 1:n_tm
 							for k = 1:n_k
 								for h = 1:n_s
-									@constraint(m,y[j,i,mo,t,k,h]==Y_agg[j,i,mo,t,k,h])		
+									#@constraint(m,y[j,i,mo,t,k,h]==Y_agg[j,i,mo,t,k,h])		
 								end
 							end
 						end
@@ -214,7 +224,7 @@ function clus_deagg(c_val,n1)
 		set_optimizer_attribute(m,"Presolve",2)
 		set_optimizer_attribute(m,"BarHomogeneous",1)
 		#set_optimizer_attribute(m,"Crossover",0)
-		set_optimizer_attribute(m, "MIPGap", 0.03)
+		set_optimizer_attribute(m, "MIPGap", 0.006)
 		#set_optimizer_attribute(m,"Heuristics",0.05)
 		#set_optimizer_attribute(m,"MIPFocus",3)
 		set_optimizer_attribute(m,"Cuts",0)
@@ -274,8 +284,8 @@ function clus_deagg(c_val,n1)
 	    X_arr[c_val] = hcat(mean(X1[:,findall(x->x==1,p1)],dims=2),mean(X1[:,findall(x->x==2,p1)],dims=2))
 	    X_arr[c_val*"_"*string(n1)*"_1"] = X1[:,findall(x->x==1,p1)]
 	    X_arr[c_val*"_"*string(n1)*"_2"] = X1[:,findall(x->x==2,p1)]
-	    planmax[c_val*"_"*string(n1)*"_1"] = p2[1]
-	    planmax[c_val*"_"*string(n1)*"_2"] = p2[2]
+	    planmax[c_val*"_"*string(n1)*"_1"] = p2[1]*max_pl
+	    planmax[c_val*"_"*string(n1)*"_2"] = p2[2]*max_pl
 	   
 	    clus_deagg(c_val,n1)
 	    print(x[:,c_val*"_"*string(n1)*"_1"])
