@@ -12,8 +12,6 @@ plant = ["Plant"]
 powergen = ["Solar panel","Wind Turbine"]
 global component = [plant;powergen]
 chemical = ["Cl2","H2","O2","NaCl","NaOH","Water"]
-Location_tr = []
-Location = []
 Consumer_supplier = ["j1","j2","j3","j4","j5","j6","j7","j8"]
 modes = ["SC","OD","Shut"]
 
