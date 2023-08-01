@@ -197,10 +197,17 @@ function modgen(n_loc,Location,Location_tr,trline,Param,plan_max,n_lij,n_bun_agg
 	    global transcostc = @expression(m,[i in plant,c in chemical,j in Consumer_supplier,loc in Location],sum(Tr_1[i,c,loc,j,:].*S[(i,c)].*C_t[(c)].*dist[(loc,j)]))
 	    global eleccost = @expression(m,[t = 1:n_tm,k=1:n_k,h = 1:n_s],w[(k,t)].*Ce[(t,k,h)].*p_flowext[t,k,h]*S_base*elec_fac)
 	    global FIXOP = @expression(m,[i in component],sum(FOC[(i)].*x[i,:])/n_m)
-	    global FIXOP_l = @expression(m,[(p,v) in trline],sum(FOC_l[(p,v)].*n[(p,v),l] for l in 1:n_lij)/(2*n_m))
+	    if(length(trline)==0)
+	    	global FIXOP_l = 0
+	    else
+	        global FIXOP_l = @expression(m,[(p,v) in trline],sum(FOC_l[(p,v)].*n[(p,v),l] for l in 1:n_lij)*1/(2*n_m))
+	    end
 	    global CAPEX = @expression(m,[i in component],sum(DIC[(i)].*x[i,:])/n_m)
-	    global CAPEX_l = @expression(m,[(p,v) in trline],sum(DIC_l[(p,v)].*n[(p,v),l] for l in 1:n_lij)/(2*n_m))
-
+	    if(length(trline)==0)
+	    	global CAPEX_l = 0
+	    else
+		global CAPEX_l = @expression(m,[(p,v) in trline],sum(DIC_l[(p,v)].*n[(p,v),l] for l in 1:n_lij)*1/(2*n_m))
+	    end	
 	    @objective(m,Min,-(sum(matcostc)-sum(transcostc)-sum(eleccost)-sum(FIXOP)-sum(FIXOP_l)-sum(CAPEX)-sum(CAPEX_l))/1000)
 	    return m
 	end
