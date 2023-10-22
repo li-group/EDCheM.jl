@@ -81,8 +81,13 @@ files_l = [joinpath(rootn,"Examples",Example_folder,"transmission.csv")]
 df_parampath = joinpath(rootn,"Examples",Example_folder,"datahalf.csv")
 solar_folder = joinpath(rootn,"Examples",Example_folder,"solar100output")
 wind_folder = joinpath(rootn,"Examples",Example_folder,"wind100output")
+poweroutput_path = [solar_folder,wind_folder]
 years = [2011,2012,2013]
-infl = [(2.07/100+1)*(1.46/100+1),(1.46/100+1),1]*(1+24.10/100)#Add values for all years in between first and last year
+infl = Dict()
+infl[2011] = (2.07/100+1)*(1.46/100+1)*(1+24.10/100)
+infl[2012] = (1.46/100+1)*(1+24.10/100)
+infl[2013] = (1+24.10/100)
+#infl = [(2.07/100+1)*(1.46/100+1),(1.46/100+1),1]*(1+24.10/100)#Add values for all years in between first and last year
 Dem = DataFrame(CSV.File(joinpath(rootn,"Examples",Example_folder,"Demand25.csv")))
 D= Dict()
 Dem_fac = 1
@@ -91,6 +96,7 @@ for i in 1:nrow(Dem)
 end
 
 
+Qb = 80000
 
 include(joinpath(rootn,"src","kmeansalg.jl"))
 w = Dict()
@@ -110,13 +116,13 @@ for t = 1:n_tm
   for k= 1:n_k
     for h = 1:n_s
 
-      Ce[(t,k,h)] = cen[h,k]*ns1[2,1]+ns1[1,1]
+      Ce[(t,k,h)] = cen[h,k]*(ns1[1])[2]+(ns1[1])[1]
       for q in 1:n_loc_og
-        P_og[(component[2],"r"*string(q),t,k,h)] = cen[24+(q-1)*24+h,k]*ns1[2,2]+ns1[1,2]
+        P_og[(component[2],"r"*string(q),t,k,h)] = cen[24+(q-1)*24+h,k]*(ns1[2])[2]+(ns1[2])[1]
         if (P_og[(component[2],"r"*string(q),t,k,h)]<=1)
           P_og[(component[2],"r"*string(q),t,k,h)] = 0
         end
-        P_og[(component[3],"r"*string(q),t,k,h)] = cen[24+n_loc_og*24+(q-1)*24+h,k]*ns1[2,3]+ns1[1,3]
+        P_og[(component[3],"r"*string(q),t,k,h)] = cen[24+n_loc_og*24+(q-1)*24+h,k]*(ns1[3])[2]+(ns1[3])[1]
         if (P_og[(component[3],"r"*string(q),t,k,h)]<=1)
           P_og[(component[3],"r"*string(q),t,k,h)] = 0
         end
@@ -125,6 +131,9 @@ for t = 1:n_tm
     end
   end
 end
+
+
+
 n_lij_og = 1
 n_lij_agg = 1
 n_clus = 5
