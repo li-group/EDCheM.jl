@@ -176,8 +176,8 @@ end
 for i in locno
   j = nlocno[i]
   if(length(j)>=1)
-    @constraint(model,sum(p[j])<=0.95+22*q[i])
-    @constraint(model,sum(p[j])>=1.05-22*(1-q[i]))
+    @constraint(model,sum(p[j])<=100*q[i])
+    @constraint(model,sum(p[j])>=2*q[i])
   end
 end
 
