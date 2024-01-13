@@ -41,13 +41,10 @@ function modgen(n_loc,Location,Location_tr,trline,Param,plan_max,n_lij,n_bun_agg
 	    x = m[:x]
 	    nt = m[:nt]
 	    
-	    @constraint(m,xm[loc in Location],sum(x["Plant",loc]).<=plan_max[(loc)]) #plan_max = Maximum number of plants in a location
-	    @constraint(m,xm2[loc in Location],sum(x["Wind Turbine",loc]).<=max_wt_pl*plan_max[(loc)])
-	    @constraint(m,xm3[loc in Location],sum(x["Solar panel",loc]).<=max_sp_pl*plan_max[(loc)])
-	   	@constraint(m,sum(x["Wind Turbine",Location])<=max_wt)
-	    @constraint(m,sum(x["Solar panel",Location])<=max_sp)
-	    @constraint(m,xm1[i in component,loc in Location],x[i,loc]>=0)
-	    @constraint(m,trx[loc in Location],(sum(nt[(p,v),l] for l in 1:n_lij for (p,v) in trline if v==loc)+sum(nt[(p,v),l] for l in 1:n_lij for (p,v) in trline if p==loc))*500*plan_max[(loc)]>=sum(x[:,loc]))
+	   @constraint(m,xm[i in component,loc in Location],x[i,loc].<=max_ratio[i]*plan_max[(loc)])
+	   @constraint(m,xm1[i in component],sum(x[i,Location])<=max_full[i])
+	   @constraint(m,xm2[i in component,loc in Location],x[i,loc]>=0)
+	   @constraint(m,trx[loc in Location],(sum(nt[(p,v),l] for l in 1:n_lij for (p,v) in trline if v==loc)+sum(nt[(p,v),l] for l in 1:n_lij for (p,v) in trline if p==loc))*500*plan_max[(loc)]>=sum(x[:,loc]))
 	    
 	    return m
 	end
