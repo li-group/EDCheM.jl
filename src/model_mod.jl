@@ -41,7 +41,7 @@ function modgen(n_loc,Location,Location_tr,trline,Param,plan_max,n_lij,n_bun_agg
 	    x = m[:x]
 	    nt = m[:nt]
 	    
-	    @constraint(m,xm[loc in Location],sum(x["Plant",loc]).<=plan_max[(loc)]) #plan_max = Maximum number of plants in a location
+	    @constraint(m,xm[loc in Location],sum(x[plant,loc]).<=plan_max[(loc)]) #plan_max = Maximum number of plants in a location
 	    @constraint(m,xm2[loc in Location],sum(x["Wind Turbine",loc]).<=max_wt_pl*plan_max[(loc)])
 	    @constraint(m,xm3[loc in Location],sum(x["Solar panel",loc]).<=max_sp_pl*plan_max[(loc)])
 	   	@constraint(m,sum(x["Wind Turbine",Location])<=max_wt)
@@ -143,7 +143,7 @@ function modgen(n_loc,Location,Location_tr,trline,Param,plan_max,n_lij,n_bun_agg
 	   
 	    @variable(m,Gen[loc in Location,1:n_tm,1:n_k,1:n_s])
 	    @variable(m,Dempl[loc in Location,1:n_tm,1:n_k,1:n_s])
-	    @constraint(m,gcon[loc in Location,t=1:n_tm,k=1:n_k,h=1:n_s],S_base*Gen[loc,t,k,h].==(P[("Solar panel",loc,t,k,h)].*x["Solar panel",loc]+P[("Wind Turbine",loc,t,k,h)].*x["Wind Turbine",loc]))
+	   @constraint(m,gcon[loc in Location,t=1:n_tm,k=1:n_k,h=1:n_s],S_base*Gen[loc,t,k,h].==sum(P[(i,loc,t,k,h)].*x[i,loc] for i in powergen))
 	    @constraint(m,dcon[loc in Location,t=1:n_tm,k=1:n_k,h=1:n_s],S_base*Dempl[loc,t,k,h].==sum(Po_1[plant,loc,t,k,h]))
 	    @constraint(m,curtail[loc in Location,t=1:n_tm,k=1:n_k,h=1:n_s], p_cu[loc,t,k,h] <= Gen[loc,t,k,h])
 	    @constraint(m,powbaln1[loc in Location,t=1:n_tm,k=1:n_k,h=1:n_s],p_cu[loc,t,k,h] + Dempl[loc,t,k,h].==Gen[loc,t,k,h] -sum(p_flow[(p,v),l,t,k,h] for l in 1:n_lij for (p,v) in trline if p==loc)) 
