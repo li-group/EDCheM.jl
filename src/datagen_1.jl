@@ -15,17 +15,15 @@ for t = 1:n_tm
     for h = 1:n_s
 
       #Ce[(t,k,h)] = cen[h,k]*ns1[2,1]+ns1[1,1]
+      for i in 1:length(powergen)
       for q in 1:n_loc
-        P[(component[2],Location_tr[q],t,k,h)] = P3[b1,q]
-        if (P[(component[2],Location_tr[q],t,k,h)]<=1)
-          P[(component[2],Location_tr[q],t,k,h)] = 0
+        P[(powergen[i],Location_tr[q],t,k,h)] = P3[b1+(i-1)*n_s*n_k*n_tm,q]
+        if (P[(powergen[i],Location_tr[q],t,k,h)]<=1)
+          P[(powergen[i],Location_tr[q],t,k,h)] = 0
         end
-        P[(component[3],Location_tr[q],t,k,h)] = P3[b1+n_s*n_k*n_tm,q]
-        if (P[(component[3],Location_tr[q],t,k,h)]<=1)
-          P[(component[3],Location_tr[q],t,k,h)] = 0
-        end
-      end
-			b1 = b1+1
+      	end
+      end	
+				b1 = b1+1
     end
   end
 end
@@ -181,13 +179,12 @@ function gendata(n_bun,trline,Location,dist)
 	    		ΔC[(i,Base_chem[i],mod)]=(C_max[(i,Base_chem[i],mod)]-C_min[(i,Base_chem[i],mod)])/2
 	  		end
 	end
-	
-	DIC[("Solar panel")] = DIC[("Solar panel")]/sp_prfac
-	DIC[("Wind Turbine")] = DIC[("Wind Turbine")]/wt_prfac
-	OCC[("Solar panel")] = OCC[("Solar panel")]/sp_prfac
-	OCC[("Wind Turbine")] = OCC[("Wind Turbine")]/wt_prfac
-	FOC[("Solar panel")] = FOC[("Solar panel")]/sp_prfac
-	FOC[("Wind Turbine")] = FOC[("Wind Turbine")]/wt_prfac
+	for i in 1:length(powergen)
+		DIC[(powergen[i])] = DIC[(powergen[i])]/prfac[powergen[i]]
+		OCC[(powergen[i])] = OCC[(powergen[i])]/prfac[powergen[i]]
+		FOC[(powergen[i])] = FOC[(powergen[i])]/prfac[powergen[i]]
+		
+	end
     h = Base.@locals
 	Param = Dict()
 	
