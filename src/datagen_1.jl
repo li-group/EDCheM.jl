@@ -20,7 +20,7 @@ for t = 1:n_tm
         if (P[(component[2],Location_tr[q],t,k,h)]<=1)
           P[(component[2],Location_tr[q],t,k,h)] = 0
         end
-        P[(component[3],Location_tr[q],t,k,h)] = P3[b1+1440,q]
+        P[(component[3],Location_tr[q],t,k,h)] = P3[b1+n_s*n_k*n_tm,q]
         if (P[(component[3],Location_tr[q],t,k,h)]<=1)
           P[(component[3],Location_tr[q],t,k,h)] = 0
         end
